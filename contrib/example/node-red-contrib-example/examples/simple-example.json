@@ -1,0 +1,51 @@
+[
+    {
+        "id": "2b9427f9.369ed8",
+        "type": "example",
+        "z": "bfd5aa77.bb20d8",
+        "name": "hello world",
+        "operation": "upped",
+        "append": "foo BAR",
+        "x": 345.5,
+        "y": 111,
+        "wires": [
+            [
+                "8bb02c47.0010e"
+            ]
+        ]
+    },
+    {
+        "id": "5c7a65a.0b0e49c",
+        "type": "inject",
+        "z": "bfd5aa77.bb20d8",
+        "name": "",
+        "topic": "",
+        "payload": "Hello World",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 92.5,
+        "y": 75,
+        "wires": [
+            [
+                "2b9427f9.369ed8"
+            ]
+        ]
+    },
+    {
+        "id": "8bb02c47.0010e",
+        "type": "debug",
+        "z": "bfd5aa77.bb20d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 594.5,
+        "y": 147,
+        "wires": []
+    }
+]

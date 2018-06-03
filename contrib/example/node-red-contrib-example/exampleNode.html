@@ -1,0 +1,52 @@
+<script type="text/javascript">
+    RED.nodes.registerType('example', {
+        category: 'function',
+        color: '#E6E0F8',
+        icon: 'to-lowercase.png',
+        inputs: 1,
+        outputs: 1,
+        defaults: {
+            name: { value: "" },
+            operation: { value: "lower" },
+            append: { value: "" }
+        },
+        label: function () {
+            return this.name || 'example';
+        },
+        oneditprepare: function () {
+            $("#node-input-operation").change(function(e) {
+                let value = $(this).val();
+                if (value === "append") {
+                    $("#node-row-append").show();
+                }
+                else {
+                    $("#node-row-append").hide();
+                }
+            })
+            $("#node-input-operation").change();
+        }
+    })
+</script>
+
+<script type="text/x-red" data-template-name="example">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i>Name</label>
+        <input type="text" id="node-input-name">
+    </div>    
+    <div class="form-row">
+        <label for="node-input-operation"><i class="fa fa-tag"></i>Operation</label>
+        <select id="node-input-operation">
+            <option value="lower">to lower case</option>
+            <option value="upped">to upper case</option>
+            <option value="append">to append text</option>
+        </select>
+    </div>    
+    <div class="form-row" id="node-row-append">
+        <label for="node-input-append"><i class="fa fa-tag"></i>Append</label>
+        <input type="text" id="node-input-append">
+    </div>
+</script>
+
+<script type='text/x-red' data-help-name='example'>
+    <p>Converts msg.payload to a lower case string.</p>
+</script>

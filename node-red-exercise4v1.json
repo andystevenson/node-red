@@ -1,0 +1,365 @@
+[
+    {
+        "id": "d9010a22.548308",
+        "type": "debug",
+        "z": "127cf40c.85567c",
+        "name": "Watson IoT Output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 930,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "33529c72.0cdf94",
+        "type": "inject",
+        "z": "127cf40c.85567c",
+        "name": "id: device2 temp: 10",
+        "topic": "device2",
+        "payload": "{\"d\":{\"temperature\": 10}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 210,
+        "y": 220,
+        "wires": [
+            [
+                "846ceefc.4ad4f"
+            ]
+        ]
+    },
+    {
+        "id": "69d6d429.17178c",
+        "type": "inject",
+        "z": "127cf40c.85567c",
+        "name": "id: device1 temp: 10",
+        "topic": "device1",
+        "payload": "{\"d\":{\"temperature\": 10}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 210,
+        "y": 120,
+        "wires": [
+            [
+                "846ceefc.4ad4f"
+            ]
+        ]
+    },
+    {
+        "id": "ba7460a7.a12c2",
+        "type": "inject",
+        "z": "127cf40c.85567c",
+        "name": "id: device1 temp: 30",
+        "topic": "device1",
+        "payload": "{\"d\":{\"temperature\": 30}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 210,
+        "y": 160,
+        "wires": [
+            [
+                "846ceefc.4ad4f"
+            ]
+        ]
+    },
+    {
+        "id": "ba788769.546db8",
+        "type": "inject",
+        "z": "127cf40c.85567c",
+        "name": "id: device2 temp: 30",
+        "topic": "device2",
+        "payload": "{\"d\":{\"temperature\": 30}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 210,
+        "y": 260,
+        "wires": [
+            [
+                "846ceefc.4ad4f"
+            ]
+        ]
+    },
+    {
+        "id": "a7ad4110.f8783",
+        "type": "cloudant in",
+        "z": "127cf40c.85567c",
+        "name": "",
+        "cloudant": "",
+        "database": "dev",
+        "service": "ajs-node-red-cloudantNoSQLDB",
+        "search": "_id_",
+        "design": "",
+        "index": "",
+        "x": 530,
+        "y": 180,
+        "wires": [
+            [
+                "fcc318b3.0d0a18"
+            ]
+        ]
+    },
+    {
+        "id": "846ceefc.4ad4f",
+        "type": "change",
+        "z": "127cf40c.85567c",
+        "name": "event",
+        "rules": [
+            {
+                "t": "set",
+                "p": "device",
+                "pt": "msg",
+                "to": "$.{\"_id\": $.topic, \"screen\": $.payload.d.temperature > 29 ? \"on\" : \"off\"}",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$.{\"_id\": $.topic}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 180,
+        "wires": [
+            [
+                "a7ad4110.f8783"
+            ]
+        ]
+    },
+    {
+        "id": "f216d075.d09c2",
+        "type": "change",
+        "z": "127cf40c.85567c",
+        "name": "show",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$.{\"screen\": $.device.screen}",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "deviceId",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 770,
+        "y": 260,
+        "wires": [
+            [
+                "d9010a22.548308"
+            ]
+        ]
+    },
+    {
+        "id": "fcc318b3.0d0a18",
+        "type": "switch",
+        "z": "127cf40c.85567c",
+        "name": "exists?",
+        "property": "cloudant",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 200,
+        "y": 380,
+        "wires": [
+            [
+                "daef9bb2.dbbbd8"
+            ],
+            [
+                "82e8ebb3.d0a288"
+            ]
+        ]
+    },
+    {
+        "id": "daef9bb2.dbbbd8",
+        "type": "change",
+        "z": "127cf40c.85567c",
+        "name": "create",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "device",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "action",
+                "pt": "msg",
+                "to": "create",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 360,
+        "wires": [
+            [
+                "a4bf9c21.f5104",
+                "f216d075.d09c2"
+            ]
+        ]
+    },
+    {
+        "id": "a4bf9c21.f5104",
+        "type": "cloudant out",
+        "z": "127cf40c.85567c",
+        "name": "",
+        "cloudant": "",
+        "database": "dev",
+        "service": "ajs-node-red-cloudantNoSQLDB",
+        "payonly": true,
+        "operation": "insert",
+        "x": 550,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "9de39e8d.cb2cc",
+        "type": "cloudant out",
+        "z": "127cf40c.85567c",
+        "name": "",
+        "cloudant": "",
+        "database": "dev",
+        "service": "ajs-node-red-cloudantNoSQLDB",
+        "payonly": true,
+        "operation": "insert",
+        "x": 710,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "82e8ebb3.d0a288",
+        "type": "switch",
+        "z": "127cf40c.85567c",
+        "name": "update?",
+        "property": "cloudant.screen",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "device.screen",
+                "vt": "msg"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 340,
+        "y": 420,
+        "wires": [
+            [
+                "ec492cce.c69c1"
+            ],
+            [
+                "781d72a9.b5017c"
+            ]
+        ]
+    },
+    {
+        "id": "ec492cce.c69c1",
+        "type": "change",
+        "z": "127cf40c.85567c",
+        "name": "update",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.screen",
+                "pt": "msg",
+                "to": "device.screen",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "action",
+                "pt": "msg",
+                "to": "update",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 427,
+        "wires": [
+            [
+                "9de39e8d.cb2cc",
+                "f216d075.d09c2"
+            ]
+        ]
+    },
+    {
+        "id": "781d72a9.b5017c",
+        "type": "change",
+        "z": "127cf40c.85567c",
+        "name": "no-update",
+        "rules": [
+            {
+                "t": "set",
+                "p": "action",
+                "pt": "msg",
+                "to": "no-update",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 460,
+        "wires": [
+            [
+                "f216d075.d09c2"
+            ]
+        ]
+    }
+]
